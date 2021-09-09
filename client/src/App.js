@@ -1,17 +1,59 @@
-// import logo from './logo.svg';
-import './App.css';
 import Users from './Components/Users'
-// import UserAlert from "./Components/Alert";
-function App() {
+
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+export default function App() {
   return (
-    <div className="App container-sm">
-      <header className="App-header">
-        <h1>Header</h1>
-        <Users />
-        {/* <UserAlert/> */}
-      </header>
-    </div>
+    <Router>
+      <div className="App container-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="http://onet.pl">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <Link className="nav-link" to="/">Home</Link>
+                </li>
+                <li class="nav-item">
+                  <Link className="nav-link" to="/about">About</Link>
+                </li>
+                <li class="nav-item">
+                  <Link className="nav-link" to="/users">Users</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <Switch>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
-export default App;
+function Home() {
+  return <h2>Home</h2>;
+}
+
+function About() {
+  return <h2>About</h2>;
+}
