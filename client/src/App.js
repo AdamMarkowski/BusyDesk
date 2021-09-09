@@ -1,25 +1,14 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import Users from './Components/Users'
-import UserAlert from "./Components/Alert";
+// import UserAlert from "./Components/Alert";
 function App() {
   return (
-    <div className="App">
+    <div className="App container-sm">
       <header className="App-header">
+        <h1>Header</h1>
         <Users />
-        <UserAlert/>
-        {/*<img src={logo} className="App-logo" alt="logo" />*/}
-        {/*<p>*/}
-        {/*  Edit <code>src/App.js</code> and save to reload.*/}
-        {/*</p>*/}
-        {/*<a*/}
-        {/*  className="App-link"*/}
-        {/*  href="https://reactjs.org"*/}
-        {/*  target="_blank"*/}
-        {/*  rel="noopener noreferrer"*/}
-        {/*>*/}
-        {/*  Learn React*/}
-        {/*</a>*/}
+        {/* <UserAlert/> */}
       </header>
     </div>
   );
