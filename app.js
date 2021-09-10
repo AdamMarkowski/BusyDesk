@@ -7,6 +7,9 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var spacesRouter = require('./routes/spaces');
+var desksRouter = require('./routes/desks');
+var reservationsRouter = require('./routes/reservations');
 
 var corsOptions = {
   origin: 'http://localhost',
@@ -29,6 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/spaces', spacesRouter);
+app.use('/desks', desksRouter);
+app.use('/reservations', reservationsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

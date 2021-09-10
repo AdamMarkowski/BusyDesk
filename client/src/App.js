@@ -1,4 +1,7 @@
 import Users from './Components/Users'
+import Spaces from './Components/Spaces'
+import Desks from './Components/Desks'
+import Reservations from './Components/Reservations'
 
 import React from "react";
 import {
@@ -24,10 +27,16 @@ export default function App() {
                   <Link className="nav-link" to="/">Home</Link>
                 </li>
                 <li class="nav-item">
-                  <Link className="nav-link" to="/about">About</Link>
+                  <Link className="nav-link" to="/users">Users</Link>
                 </li>
                 <li class="nav-item">
-                  <Link className="nav-link" to="/users">Users</Link>
+                  <Link className="nav-link" to="/spaces">Spaces</Link>
+                </li>
+                <li class="nav-item">
+                  <Link className="nav-link" to="/desks">Desks</Link>
+                </li>
+                <li class="nav-item">
+                  <Link className="nav-link" to="/reservations">Reservations</Link>
                 </li>
               </ul>
             </div>
@@ -40,6 +49,15 @@ export default function App() {
           </Route>
           <Route path="/users">
             <Users />
+          </Route>
+          <Route path="/spaces">
+            <Spaces />
+          </Route>
+          <Route path="/desks">
+            <Desks />
+          </Route>
+          <Route path="/reservations">
+            <Reservations />
           </Route>
           <Route path="/">
             <Home />
