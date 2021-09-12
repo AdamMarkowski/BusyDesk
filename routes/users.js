@@ -15,6 +15,37 @@ router.get('/', function (req, res, next) {
   });
 });
 
+router.post('/login', (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const sql = 'SELECT * FROM users where email = ? AND password = ?';
+  dbConn.query(sql, [email, password], (err, data) => {
+      if (err || data.length === 0) {
+        console.log(err)
+
+        res.status(401)
+        res.json({
+          status: 'error',
+          ...err
+        })
+      } else {
+        const currentUser = Object.assign({}, data[0]);
+
+        res.cookie('currentUser', encodeURIComponent(JSON.stringify(currentUser)))
+        console.log('setting currentUser', currentUser)
+        console.log('setting currentUser s', JSON.stringify(currentUser))
+        console.log('setting currentUser s', encodeURIComponent(JSON.stringify(currentUser)))
+        // res.cookie('currentUser', data[0])
+
+        res.json({
+          status: 'ok',
+          user: data[0]
+        })
+      }
+  });
+})
+
 // add a new book
 router.post('/create/', function (req, res, next) {
   const firstName = req.body.firstName;
