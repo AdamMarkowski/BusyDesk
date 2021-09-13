@@ -166,8 +166,8 @@ const Reservations = () => {
                 <th scope="row">{reservation.id}</th>
                 <td>{findUser(reservation.user_id) && findUser(reservation.user_id).email}</td>
                 <td>{findDesk(reservation.desk_id) && findDesk(reservation.desk_id).name}</td>
-                <td>{reservation.start}</td>
-                <td>{reservation.end}</td>
+                <td>{reservation.start.slice(0, 19).replace('T', ' ')}</td>
+                <td>{reservation.end.slice(0, 19).replace('T', ' ')}</td>
                 <td><i className="bi-trash" onClick={() => removeById(reservation.id)}></i></td>
               </tr>
             ))}
