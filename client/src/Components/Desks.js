@@ -86,7 +86,7 @@ const Desks = () => {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Id</th>
+              <th scope="col">Name</th>
               <th scope="col">Space</th>
             </tr>
           </thead>
@@ -94,7 +94,7 @@ const Desks = () => {
             {desks.map(desk => (
               <tr key={desk.id}>
                 <th scope="row">{desk.id}</th>
-                <td>{desk.id}</td>
+                <td>{desk.name}</td>
                 <td>{desk.space_id}</td>
               </tr>
             ))}

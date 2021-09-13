@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 const Reservations = () => {
   const [error, setError] = useState(null);
   const [reservations, setReservations] = useState([]);
+  const [desks, setDesks] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const fetchReservations = () => fetch("http://localhost:81/reservations")
     .then(res => res.json())
@@ -16,18 +18,44 @@ const Reservations = () => {
       }
     )
 
+  const fetchDesks = () => fetch("http://localhost:81/desks")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        console.log('fetchDesks: ', result)
+        setDesks(result);
+      },
+      (error) => {
+        setError(error);
+      }
+    )
+
+  const fetchUsers = () => fetch("http://localhost:81/users")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        console.log('fetchUsers: ', result)
+        setUsers(result);
+      },
+      (error) => {
+        setError(error);
+      }
+    )
+
   useEffect(() => {
     fetchReservations()
+    fetchDesks()
+    fetchUsers()
   }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('-------', event.target.elements.email.value)
+
     const formData = {
-      email: event.target.elements.email.value,
-      firstName: event.target.elements.firstName.value,
-      lastName: event.target.elements.lastName.value,
-      password: event.target.elements.password.value
+      userId: event.target.elements.userId.value,
+      deskId: event.target.elements.deskId.value,
+      startAt: event.target.elements.startAt.value,
+      finishAt: event.target.elements.finishAt.value
     }
 
     console.log('formData: ', formData)
@@ -46,6 +74,14 @@ const Reservations = () => {
       .then(fetchReservations())
   }
 
+  const findUser = (id) => {
+    return users.find(user => user.id === id)
+  }
+
+  const findDesk = (id) => {
+    return desks.find(desk => desk.id === id)
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else {
@@ -60,23 +96,33 @@ const Reservations = () => {
             </h2>
             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">Email address</label>
-                  <input type="email" className="form-control" id="email" aria-describedby="emailHelp"></input>
+                <div class="form-group">
+                  <label for="userId" className="form-label">User</label>
+                  <select className="custom-select form-control" id="userId">
+                    {users.map(user =>
+                      <option value={user.id}>{user.email}</option>
+                    )}
+                  </select>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">First name</label>
-                  <input type="text" className="form-control" id="firstName" aria-describedby="emailHelp"></input>
+                <div class="form-group">
+                  <label for="deskId" className="form-label">Desk</label>
+                  <select className="custom-select form-control" id="deskId">
+                    {desks.map(desk =>
+                      <option value={desk.id}>{desk.name}</option>
+                    )}
+                  </select>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">Last name</label>
-                  <input type="text" className="form-control" id="lastName" aria-describedby="emailHelp"></input>
+                <div class="form-group">
+                  <label for="startAt" className="form-label">Start at</label>
+                  <input type="datetime-local" className="form-control" id="startAt"></input>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputPassword1" className="form-label">Password</label>
-                  <input type="password" className="form-control" id="password"></input>
+                <div class="form-group">
+                  <label for="finishAt" className="form-label">Finish at</label>
+                  <input type="datetime-local" className="form-control" id="finishAt"></input>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div class="form-group">
+                  <button type="submit" className="btn btn-primary mt-3">Submit</button>
+                </div>
               </form>
             </div>
           </div>
@@ -96,8 +142,8 @@ const Reservations = () => {
             {reservations.map(reservation => (
               <tr key={reservation.id}>
                 <th scope="row">{reservation.id}</th>
-                <td>{reservation.user_id}</td>
-                <td>{reservation.desk_id}</td>
+                <td>{findUser(reservation.user_id) && findUser(reservation.user_id).email}</td>
+                <td>{findDesk(reservation.desk_id) && findDesk(reservation.desk_id).name}</td>
                 <td>{reservation.start}</td>
                 <td>{reservation.end}</td>
               </tr>
