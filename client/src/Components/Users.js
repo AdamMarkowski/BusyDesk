@@ -46,6 +46,12 @@ const Users = () => {
       .then(fetchUsers())
   }
 
+  const removeById = (id) => {
+    setUsers(
+      users.filter(user => user.id !== id)
+    )
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else {
@@ -89,6 +95,7 @@ const Users = () => {
               <th scope="col">First</th>
               <th scope="col">Last</th>
               <th scope="col">Email</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -98,6 +105,7 @@ const Users = () => {
                 <td>{user.lastName}</td>
                 <td>{user.firstName}</td>
                 <td>{user.email}</td>
+                <td><i className="bi-trash" onClick={() => removeById(user.id)}></i></td>
               </tr>
             ))}
           </tbody>

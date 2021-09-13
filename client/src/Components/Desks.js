@@ -68,6 +68,12 @@ const Desks = () => {
     return spaces.find(space => space.id === id)
   }
 
+  const removeById = (id) => {
+    setDesks(
+      desks.filter(desk => desk.id !== id)
+    )
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else {
@@ -114,6 +120,7 @@ const Desks = () => {
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Space</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -122,6 +129,7 @@ const Desks = () => {
                 <th scope="row">{desk.id}</th>
                 <td>{desk.name}</td>
                 <td>{findSpace(desk.space_id) && findSpace(desk.space_id).name}</td>
+                <td><i className="bi-trash" onClick={() => removeById(desk.id)}></i></td>
               </tr>
             ))}
           </tbody>

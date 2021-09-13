@@ -50,6 +50,12 @@ const Spaces = () => {
       })
   }
 
+  const removeById = (id) => {
+    setSpaces(
+      spaces.filter(space => space.id !== id)
+    )
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else {
@@ -87,6 +93,7 @@ const Spaces = () => {
               <th scope="col">#</th>
               <th scope="col">Name</th>
               {/* <th scope="col">Capacity</th> */}
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -95,6 +102,7 @@ const Spaces = () => {
                 <th scope="row">{space.id}</th>
                 <td>{space.name}</td>
                 {/* <td>{space.capacity}</td> */}
+                <td><i className="bi-trash" onClick={() => removeById(space.id)}></i></td>
               </tr>
             ))}
           </tbody>

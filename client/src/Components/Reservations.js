@@ -88,6 +88,12 @@ const Reservations = () => {
     return desks.find(desk => desk.id === id)
   }
 
+  const removeById = (id) => {
+    setReservations(
+      reservations.filter(reservation => reservation.id !== id)
+    )
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else {
@@ -151,6 +157,7 @@ const Reservations = () => {
               <th scope="col">Desk</th>
               <th scope="col">Start</th>
               <th scope="col">End</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -161,6 +168,7 @@ const Reservations = () => {
                 <td>{findDesk(reservation.desk_id) && findDesk(reservation.desk_id).name}</td>
                 <td>{reservation.start}</td>
                 <td>{reservation.end}</td>
+                <td><i className="bi-trash" onClick={() => removeById(reservation.id)}></i></td>
               </tr>
             ))}
           </tbody>
