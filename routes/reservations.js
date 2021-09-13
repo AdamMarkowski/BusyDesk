@@ -21,28 +21,49 @@ router.post('/create/', function (req, res, next) {
   const startAt = req.body.startAt;
   const finishAt = req.body.finishAt;
 
-  // insert query
+  // check if not alfready reserved
+  // https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
   dbConn.query(
-    `INSERT INTO reservations
-      (user_id, desk_id, start, end)
-      VALUES
-      (?, ?, ?, ?)`,
-    [userId, deskId, formatDate(startAt), formatDate(finishAt)],
-    function (err, result) {
-
-      console.log('req.body: ', req.body)
-
-      if (err) {
-        console.log(err)
+    `SELECT * FROM reservations
+    WHERE
+    (
+        (? <= end AND ? >= start)
+        AND desk_id = ?
+    )`,
+    [formatDate(startAt), formatDate(finishAt), deskId],
+    (err, results) => {
+      if (results.length > 0) {
+        console.log('already reserved! ', results.length)
 
         res.json({
-          status: 'error',
+          status: 'reserved',
           ...err
         })
       } else {
-        res.json({
-          status: 'ok'
-        })
+        // insert query
+        dbConn.query(
+          `INSERT INTO reservations
+            (user_id, desk_id, start, end)
+            VALUES
+            (?, ?, ?, ?)`,
+          [userId, deskId, formatDate(startAt), formatDate(finishAt)],
+          function (err, result) {
+
+            console.log('req.body: ', req.body)
+
+            if (err) {
+              console.log(err)
+
+              res.json({
+                status: 'error',
+                ...err
+              })
+            } else {
+              res.json({
+                status: 'ok'
+              })
+            }
+          })
       }
     })
 })

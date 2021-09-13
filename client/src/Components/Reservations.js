@@ -5,6 +5,7 @@ const Reservations = () => {
   const [reservations, setReservations] = useState([]);
   const [desks, setDesks] = useState([]);
   const [users, setUsers] = useState([]);
+  const [createStatus, setCreateStatus] = useState(null);
 
   const fetchReservations = () => fetch("http://localhost:81/reservations")
     .then(res => res.json())
@@ -48,6 +49,10 @@ const Reservations = () => {
     fetchUsers()
   }, [])
 
+  useEffect(() => {
+    fetchReservations()
+  }, [createStatus])
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
@@ -70,8 +75,10 @@ const Reservations = () => {
         body: JSON.stringify(formData)
       })
       .then(function (res) { return res.json(); })
+      .then((res) => {
+        setCreateStatus(res.status)
+      })
       .then(function (data) { console.log('---------', JSON.stringify(data)) })
-      .then(fetchReservations())
   }
 
   const findUser = (id) => {
@@ -96,7 +103,7 @@ const Reservations = () => {
             </h2>
             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <form onSubmit={handleSubmit}>
-                <div class="form-group">
+                <div className="form-group">
                   <label for="userId" className="form-label">User</label>
                   <select className="custom-select form-control" id="userId">
                     {users.map(user =>
@@ -104,7 +111,7 @@ const Reservations = () => {
                     )}
                   </select>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <label for="deskId" className="form-label">Desk</label>
                   <select className="custom-select form-control" id="deskId">
                     {desks.map(desk =>
@@ -112,15 +119,24 @@ const Reservations = () => {
                     )}
                   </select>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <label for="startAt" className="form-label">Start at</label>
                   <input type="datetime-local" className="form-control" id="startAt"></input>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <label for="finishAt" className="form-label">Finish at</label>
                   <input type="datetime-local" className="form-control" id="finishAt"></input>
                 </div>
-                <div class="form-group">
+
+                { createStatus === "ok" && <div class="alert alert-success mt-2" role="alert">
+                  Reservation created successfully
+                </div> }
+
+                { createStatus === "reserved" && <div class="alert alert-danger mt-2" role="alert">
+                  The chosen date is already taken!
+                </div> }
+
+                <div className="form-group">
                   <button type="submit" className="btn btn-primary mt-3">Submit</button>
                 </div>
               </form>
@@ -132,10 +148,10 @@ const Reservations = () => {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">user_id</th>
-              <th scope="col">desk_id</th>
-              <th scope="col">start</th>
-              <th scope="col">end</th>
+              <th scope="col">User</th>
+              <th scope="col">Desk</th>
+              <th scope="col">Start</th>
+              <th scope="col">End</th>
             </tr>
           </thead>
           <tbody>
