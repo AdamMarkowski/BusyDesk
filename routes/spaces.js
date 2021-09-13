@@ -12,18 +12,15 @@ router.get('/', function (req, res, next) {
 
 // add a new book
 router.post('/create/', function (req, res, next) {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const password = req.body.password;
+  const name = req.body.name;
 
   // insert query
   dbConn.query(
-    `INSERT INTO users
-      (lastName, firstName, email, password)
+    `INSERT INTO spaces
+      (name)
       VALUES
-      (?, ?, ?, ?)`,
-    [lastName, firstName, email, password],
+      (?)`,
+    [name],
     function (err, result) {
 
       console.log('req.body: ', req.body)

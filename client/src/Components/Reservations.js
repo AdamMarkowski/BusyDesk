@@ -78,7 +78,6 @@ const Reservations = () => {
       .then((res) => {
         setCreateStatus(res.status)
       })
-      .then(function (data) { console.log('---------', JSON.stringify(data)) })
   }
 
   const findUser = (id) => {

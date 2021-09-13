@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 const Desks = () => {
   const [error, setError] = useState(null);
   const [desks, setDesks] = useState([]);
+  const [spaces, setSpaces] = useState([]);
+  const [createStatus, setCreateStatus] = useState(null);
 
   const fetchDesks = () => fetch("http://localhost:81/desks")
     .then(res => res.json())
@@ -16,18 +18,33 @@ const Desks = () => {
       }
     )
 
+  const fetchSpaces = () => fetch("http://localhost:81/spaces")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        console.log('fetchSpaces: ', result)
+        setSpaces(result);
+      },
+      (error) => {
+        setError(error);
+      }
+    )
+
   useEffect(() => {
     fetchDesks()
+    fetchSpaces()
   }, [])
+
+  useEffect(() => {
+    fetchDesks()
+  }, [createStatus])
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('-------', event.target.elements.email.value)
+
     const formData = {
-      email: event.target.elements.email.value,
-      firstName: event.target.elements.firstName.value,
-      lastName: event.target.elements.lastName.value,
-      password: event.target.elements.password.value
+      name: event.target.elements.name.value,
+      spaceId: event.target.elements.spaceId.value,
     }
 
     console.log('formData: ', formData)
@@ -42,8 +59,13 @@ const Desks = () => {
         body: JSON.stringify(formData)
       })
       .then(function (res) { return res.json(); })
-      .then(function (data) { console.log('---------', JSON.stringify(data)) })
-      .then(fetchDesks())
+      .then((res) => {
+        setCreateStatus(res.status)
+      })
+  }
+
+  const findSpace = (id) => {
+    return spaces.find(space => space.id === id)
   }
 
   if (error) {
@@ -61,22 +83,26 @@ const Desks = () => {
             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">Email address</label>
-                  <input type="email" className="form-control" id="email" aria-describedby="emailHelp"></input>
+                  <label for="name" className="form-label">Name</label>
+                  <input type="text" className="form-control" id="name"></input>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">First name</label>
-                  <input type="text" className="form-control" id="firstName" aria-describedby="emailHelp"></input>
+
+                <div className="form-group">
+                  <label for="userId" className="form-label">Space</label>
+                  <select className="custom-select form-control" id="spaceId">
+                    {spaces.map(space =>
+                      <option value={space.id}>{space.name}</option>
+                    )}
+                  </select>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">Last name</label>
-                  <input type="text" className="form-control" id="lastName" aria-describedby="emailHelp"></input>
-                </div>
-                <div className="mb-3">
-                  <label for="exampleInputPassword1" className="form-label">Password</label>
-                  <input type="password" className="form-control" id="password"></input>
-                </div>
+
+                { createStatus === "ok" && <div class="alert alert-success mt-2" role="alert">
+                  Desk created successfully
+                </div> }
+
+                <div className="form-group">
                 <button type="submit" className="btn btn-primary">Submit</button>
+                </div>
               </form>
             </div>
           </div>
@@ -95,7 +121,7 @@ const Desks = () => {
               <tr key={desk.id}>
                 <th scope="row">{desk.id}</th>
                 <td>{desk.name}</td>
-                <td>{desk.space_id}</td>
+                <td>{findSpace(desk.space_id) && findSpace(desk.space_id).name}</td>
               </tr>
             ))}
           </tbody>

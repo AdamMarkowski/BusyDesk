@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const Spaces = () => {
   const [error, setError] = useState(null);
   const [spaces, setSpaces] = useState([]);
+  const [createStatus, setCreateStatus] = useState(null);
 
   const fetchSpaces = () => fetch("http://localhost:81/spaces")
     .then(res => res.json())
@@ -20,14 +21,16 @@ const Spaces = () => {
     fetchSpaces()
   }, [])
 
+  useEffect(() => {
+    fetchSpaces()
+  }, [createStatus])
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('-------', event.target.elements.email.value)
+    console.log('-------', event.target.elements.name.value)
+
     const formData = {
-      email: event.target.elements.email.value,
-      firstName: event.target.elements.firstName.value,
-      lastName: event.target.elements.lastName.value,
-      password: event.target.elements.password.value
+      name: event.target.elements.name.value
     }
 
     console.log('formData: ', formData)
@@ -42,8 +45,9 @@ const Spaces = () => {
         body: JSON.stringify(formData)
       })
       .then(function (res) { return res.json(); })
-      .then(function (data) { console.log('---------', JSON.stringify(data)) })
-      .then(fetchSpaces())
+      .then((res) => {
+        setCreateStatus(res.status)
+      })
   }
 
   if (error) {
@@ -60,23 +64,18 @@ const Spaces = () => {
             </h2>
             <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">Email address</label>
-                  <input type="email" className="form-control" id="email" aria-describedby="emailHelp"></input>
+                <div className="form-group">
+                  <label for="name" className="form-label">Name</label>
+                  <input type="text" className="form-control" id="name"></input>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">First name</label>
-                  <input type="text" className="form-control" id="firstName" aria-describedby="emailHelp"></input>
+
+                {createStatus === "ok" && <div class="alert alert-success mt-2" role="alert">
+                  Space created successfully
+                </div>}
+
+                <div className="form-group">
+                  <button type="submit" className="btn btn-primary">Submit</button>
                 </div>
-                <div className="mb-3">
-                  <label for="exampleInputEmail1" className="form-label">Last name</label>
-                  <input type="text" className="form-control" id="lastName" aria-describedby="emailHelp"></input>
-                </div>
-                <div className="mb-3">
-                  <label for="exampleInputPassword1" className="form-label">Password</label>
-                  <input type="password" className="form-control" id="password"></input>
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
               </form>
             </div>
           </div>
@@ -87,7 +86,7 @@ const Spaces = () => {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
-              <th scope="col">Capacity</th>
+              {/* <th scope="col">Capacity</th> */}
             </tr>
           </thead>
           <tbody>
@@ -95,7 +94,7 @@ const Spaces = () => {
               <tr key={space.id}>
                 <th scope="row">{space.id}</th>
                 <td>{space.name}</td>
-                <td>{space.capacity}</td>
+                {/* <td>{space.capacity}</td> */}
               </tr>
             ))}
           </tbody>
