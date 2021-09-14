@@ -5,11 +5,11 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require('cors')
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var spacesRouter = require('./routes/spaces');
-var desksRouter = require('./routes/desks');
-var reservationsRouter = require('./routes/reservations');
+var indexController = require('./controllers/index');
+var usersController = require('./controllers/users');
+var spacesController = require('./controllers/spaces');
+var desksController = require('./controllers/desks');
+var reservationsController = require('./controllers/reservations');
 
 var corsOptions = {
   origin: 'http://localhost',
@@ -32,11 +32,11 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/spaces', spacesRouter);
-app.use('/desks', desksRouter);
-app.use('/reservations', reservationsRouter)
+app.use('/', indexController);
+app.use('/users', usersController);
+app.use('/spaces', spacesController);
+app.use('/desks', desksController);
+app.use('/reservations', reservationsController)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
