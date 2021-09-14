@@ -46,7 +46,7 @@ Cel projektowy został osiągnięty. Została stworzona aplikacja pozwalająca n
 
 ### Kierunek rozwoju
 
-Aplikacja umożliwia wiele kierunków rozwoju, spośród nich warto wymienić:
+Aplikacja umożliwia wiele kierunków rozwoju, wśród których warto wymienić:
 -   integracja z Google umożliwiająca logowanie za pomocą służbowego konta,
 -   umożliwienie zarezerwowania przestrzeni przez zespoły pracownicze,
 -   integracja z kalendarzem celem łatwiejszego zarządzania aktualnie zajętymi biurkami,
