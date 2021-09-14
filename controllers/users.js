@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const dbConn = require('../lib/db');
+// const dbConn = require('../lib/db');
+
+const Users = require('../models/Users')
 
 router.get('/', function (req, res, next) {
-  const sql = 'SELECT * FROM users';
-  dbConn.query(sql, (err, data) => {
+  Users.list((err, data) => {
     res.json(data);
   });
 });
@@ -13,8 +14,7 @@ router.post('/login', (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const sql = 'SELECT * FROM users where email = ? AND password = ?';
-  dbConn.query(sql, [email, password], (err, data) => {
+  Users.find(email, password, (err, data) => {
     if (err || data.length === 0) {
       console.log(err)
 
@@ -45,14 +45,9 @@ router.post('/create/', function (req, res, next) {
   const password = req.body.password;
 
   // insert query
-  dbConn.query(
-    `INSERT INTO users
-      (lastName, firstName, email, password)
-      VALUES
-      (?, ?, ?, ?)`,
-    [lastName, firstName, email, password],
-    function (err, result) {
-
+  Users.create(
+    lastName, firstName, email, password,
+    (err, result) => {
       console.log('req.body: ', req.body)
 
       if (err) {
@@ -72,10 +67,9 @@ router.post('/create/', function (req, res, next) {
 
 // delete user
 router.get('/delete/(:id)', function (req, res, next) {
-
   let id = req.params.id;
 
-  dbConn.query('DELETE FROM users WHERE id = ' + id, (err, result) => {
+  Users.destroy(id, (err, result) => {
     if (err) {
       console.log(err)
 

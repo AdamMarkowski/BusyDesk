@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const Users = () => {
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
+  const [createStatus, setCreateStatus] = useState(null);
 
   const fetchUsers = () => fetch("http://localhost:81/users")
     .then(res => res.json())
@@ -19,6 +20,10 @@ const Users = () => {
   useEffect(() => {
     fetchUsers()
   }, [])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [createStatus])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -42,8 +47,9 @@ const Users = () => {
         body: JSON.stringify(formData)
       })
       .then(function (res) { return res.json(); })
-      .then(function (data) { console.log('---------', JSON.stringify(data)) })
-      .then(fetchUsers())
+      .then((res) => {
+        setCreateStatus(res.status)
+      })
   }
 
   const removeById = (id) => {
@@ -82,6 +88,11 @@ const Users = () => {
                   <label for="exampleInputPassword1" className="form-label">Password</label>
                   <input type="password" className="form-control" id="password"></input>
                 </div>
+
+                {createStatus === "ok" && <div class="alert alert-success mt-2" role="alert">
+                  User created successfully
+                </div>}
+
                 <button type="submit" className="btn btn-primary">Submit</button>
               </form>
             </div>

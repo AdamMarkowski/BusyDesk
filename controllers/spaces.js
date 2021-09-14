@@ -2,27 +2,18 @@ const express = require('express');
 const router = express.Router();
 const dbConn = require('../lib/db');
 
+const Spaces = require('../models/Spaces')
+
 router.get('/', function (req, res, next) {
-  // const sql = 'SELECT * FROM user ORDER BY id DESC';
-  const sql = 'SELECT * FROM spaces';
-  dbConn.query(sql, (err, data) => {
+  Spaces.list((err, data) => {
     res.json(data);
   });
 });
 
-// add a new book
 router.post('/create/', function (req, res, next) {
   const name = req.body.name;
 
-  // insert query
-  dbConn.query(
-    `INSERT INTO spaces
-      (name)
-      VALUES
-      (?)`,
-    [name],
-    function (err, result) {
-
+  Spaces.create(name, (err, result) => {
       console.log('req.body: ', req.body)
 
       if (err) {

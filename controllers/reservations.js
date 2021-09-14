@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const dbConn = require('../lib/db');
 
+const Reservations = require('../models/Reservations')
+
 const formatDate = (dateString) => {
   const isoDate = new Date(dateString)
   const mySQLDateString = isoDate.toJSON().slice(0, 19).replace('T', ' ')
   return mySQLDateString
 }
+
 router.get('/', function (req, res, next) {
-  // const sql = 'SELECT * FROM user ORDER BY id DESC';
-  const sql = 'SELECT * FROM reservations';
-  dbConn.query(sql, (err, data) => {
+  Reservations.list((err, data) => {
     res.json(data);
   });
 });
@@ -21,7 +22,6 @@ router.post('/create/', function (req, res, next) {
   const startAt = req.body.startAt;
   const finishAt = req.body.finishAt;
 
-  // check if not alfready reserved
   // https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
   dbConn.query(
     `SELECT * FROM reservations
