@@ -34,13 +34,13 @@ CREATE TABLE reservations (
 INSERT INTO spaces (
   name, capacity
 ) VALUES (
-  "parter", 80
+  "ground level", 80
 );
 
 INSERT INTO spaces (
   name, capacity
 ) VALUES (
-  "pierwsze piętro", 100
+  "first floor", 100
 );
 
 INSERT INTO users (
