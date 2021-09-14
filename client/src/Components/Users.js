@@ -95,6 +95,7 @@ const Users = () => {
               <th scope="col">First</th>
               <th scope="col">Last</th>
               <th scope="col">Email</th>
+              <th scope="col">Admin?</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -105,6 +106,7 @@ const Users = () => {
                 <td>{user.lastName}</td>
                 <td>{user.firstName}</td>
                 <td>{user.email}</td>
+                <td>{user.admin ? 'True' : 'False'}</td>
                 <td><i className="bi-trash" onClick={() => removeById(user.id)}></i></td>
               </tr>
             ))}
