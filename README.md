@@ -40,7 +40,7 @@ Celem projektu jest umożliwienie jak najbardziej komfortowej i bezpiecznej prac
 -   [x] stworzeniu REST API z CRUD dla modeli - 6h,
 -   [x] implementacja logiki dla danych analitycznych - 8h,
 
-## Struktura bazt danych
+## Struktura bazy danych
 
 ![DB DIAGRAM](/docs/db.png "DB DIAGRAM")
 
