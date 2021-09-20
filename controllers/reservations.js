@@ -11,7 +11,7 @@ const formatDate = (dateString) => {
 }
 
 router.get('/', function (req, res, next) {
-  Reservations.list((err, data) => {
+  Reservations.list(req.query.dateScope, (err, data) => {
     res.json(data);
   });
 });

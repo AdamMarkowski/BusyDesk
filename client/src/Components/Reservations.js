@@ -6,18 +6,27 @@ const Reservations = () => {
   const [desks, setDesks] = useState([]);
   const [users, setUsers] = useState([]);
   const [createStatus, setCreateStatus] = useState(null);
+  const [currentDate, setCurrentDate] = useState(null);
 
-  const fetchReservations = () => fetch("http://localhost:81/reservations")
-    .then(res => res.json())
-    .then(
-      (result) => {
-        console.log('fetchReservations: ', result)
-        setReservations(result);
-      },
-      (error) => {
-        setError(error);
-      }
-    )
+  const fetchReservations = () => {
+    const url = new URL("http://localhost:81/reservations")
+    if (currentDate) {
+      const params = { dateScope: currentDate }
+      url.search = new URLSearchParams(params).toString()
+    }
+
+    fetch(url)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log('fetchReservations: ', result)
+          setReservations(result);
+        },
+        (error) => {
+          setError(error);
+        }
+      )
+  }
 
   const fetchDesks = () => fetch("http://localhost:81/desks")
     .then(res => res.json())
@@ -52,6 +61,11 @@ const Reservations = () => {
   useEffect(() => {
     fetchReservations()
   }, [createStatus])
+
+  useEffect(() => {
+    console.log('currentDate changed! ', currentDate)
+    fetchReservations()
+  }, [currentDate])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -133,11 +147,11 @@ const Reservations = () => {
                   <input type="datetime-local" className="form-control" id="finishAt"></input>
                 </div>
 
-                { createStatus === "ok" && <div class="alert alert-success mt-2" role="alert">
+                { createStatus === "ok" && <div className="alert alert-success mt-2" role="alert">
                   Reservation created successfully
                 </div> }
 
-                { createStatus === "reserved" && <div class="alert alert-danger mt-2" role="alert">
+                { createStatus === "reserved" && <div className="alert alert-danger mt-2" role="alert">
                   The chosen date is already taken!
                 </div> }
 
@@ -146,6 +160,20 @@ const Reservations = () => {
                 </div>
               </form>
             </div>
+          </div>
+        </div>
+
+        <div className="row g-3 float-end">
+          <div className="col-auto">
+            <label for="dateField" className="col-form-label">Date</label>
+          </div>
+          <div className="col-auto">
+            <input
+              type="date"
+              id="dateField"
+              className="form-control"
+              onChange={e => setCurrentDate(e.target.value)}
+              ></input>
           </div>
         </div>
 

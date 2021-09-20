@@ -7,10 +7,17 @@ const formatDate = (dateString) => {
 }
 
 module.exports = {
-  list: (callback) => {
-    const sql = 'SELECT * FROM reservations';
+  list: (dateScope, callback) => {
+    if(dateScope) {
+      const sql = `SELECT * FROM reservations WHERE start BETWEEN '${dateScope} 00:00:00' and '${dateScope} 23:59:59'`
 
-    dbConn.query(sql, callback)
+      return dbConn.query(sql, callback)
+    } else {
+      console.log('dataScope blank')
+      const sql = 'SELECT * FROM reservations';
+
+      return dbConn.query(sql, callback)
+    }
   },
 
   create: (lastName, firstName, email, password, callback) => {
