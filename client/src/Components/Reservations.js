@@ -28,6 +28,19 @@ const Reservations = () => {
       )
   }
 
+  const destroyReservation = (id) => {
+    fetch(`http://localhost:81/reservations/${id}`, { method: 'DELETE' })
+    .then(
+      (result) => {
+        console.log('destroyReservation: ', result)
+        fetchReservations()
+      },
+      (error) => {
+        setError(error);
+      }
+    )
+  }
+
   const fetchDesks = () => fetch("http://localhost:81/desks")
     .then(res => res.json())
     .then(
@@ -196,7 +209,7 @@ const Reservations = () => {
                 <td>{findDesk(reservation.desk_id) && findDesk(reservation.desk_id).name}</td>
                 <td>{reservation.start.slice(0, 19).replace('T', ' ')}</td>
                 <td>{reservation.end.slice(0, 19).replace('T', ' ')}</td>
-                <td><i className="bi-trash" onClick={() => removeById(reservation.id)}></i></td>
+                <td><i className="bi-trash" onClick={() => destroyReservation(reservation.id)}></i></td>
               </tr>
             ))}
           </tbody>

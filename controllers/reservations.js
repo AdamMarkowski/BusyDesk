@@ -68,4 +68,12 @@ router.post('/create/', function (req, res, next) {
     })
 })
 
+router.delete('/:id/', function (req, res) {
+  console.log('params: ', req.params)
+
+  Reservations.destroy(req.params.id, (err, data) => {
+    res.json({ status: 'destroyed' })
+  });
+})
+
 module.exports = router;

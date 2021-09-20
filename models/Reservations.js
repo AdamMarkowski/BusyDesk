@@ -31,6 +31,8 @@ module.exports = {
   },
 
   destroy: (id, callback) => {
+    console.log(`Destroy reservation #${id}`)
+
     dbConn.query('DELETE FROM reservations WHERE id = ?', [id], callback)
   }
 }
